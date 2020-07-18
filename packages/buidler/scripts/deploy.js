@@ -6,12 +6,13 @@ async function main() {
   // await autoDeploy();
   // OR
   // custom deploy (to use deployed addresses dynamically for example:)
+  await deploy("Attestor");
   
   const paymentToken = await deploy("PaymentToken", ['Acme', 'ACME']);
-  const padlock = await deploy("Padlock", 
-    [paymentToken.address, padlockNFT.address]);
+  const padlock = await deploy("Padlock", [paymentToken.address]);
   const padlockNFT = await deploy("PadlockNFT", ['PadlockNFT', 'PAD', padlock.address]);
   padlock.setNftContract(padlockNFT.address);
+  
 }
 main()
 .then(() => process.exit(0))
