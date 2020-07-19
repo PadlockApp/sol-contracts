@@ -104,7 +104,13 @@ module.exports = {
       url: 'http://localhost:8545',
     },
     rinkeby: {
-      url: 'https://rinkeby.infura.io/v3/c954231486fa42ccb6d132b406483d14',
+      url: 'https://rinkeby.infura.io/v3/079c6c005b174c2a97ce3f5ee397796f',
+      accounts: {
+        mnemonic: mnemonic
+      },
+    },
+    ropsten: {
+      url: 'https://ropsten.infura.io/v3/079c6c005b174c2a97ce3f5ee397796f',
       accounts: {
         mnemonic: mnemonic
       },

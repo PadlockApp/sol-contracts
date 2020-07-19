@@ -73,6 +73,11 @@ yarn run compile
 yarn run deploy
 ```
 
+Or to deploy to Ropsten
+```bash
+yarn run deploy:ropsten
+```
+
 🔍 _Watch_ for changes then compile, deploy, and hot reload the frontend:
 
 ```bash
