@@ -1,5 +1,9 @@
 {
   "name": "@uniswap-v1-app/contracts",
   "version": "1.0.0",
-  "main": "./src/index.js"
+  "main": "./src/index.js",
+  "devDependencies": {
+    "@nomiclabs/buidler": "^1.3.8",
+    "@nomiclabs/buidler-etherscan": "^1.3.3"
+  }
 }

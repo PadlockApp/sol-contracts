@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import 'antd/dist/antd.css';
 import { ethers } from "ethers";
 import "./App.css";
-import { Row, Col, Input, Button, Spin } from 'antd';
+import { Row, Col, Input, Button, Spin, Typography } from 'antd';
 import { Transactor } from "./helpers"
 import { useExchangePrice, useGasPrice, useContractLoader, useContractReader } from "./hooks"
 import { Header, Account, Provider, Faucet, Ramp, Address, Contract } from "./components"
@@ -12,6 +12,10 @@ const { encrypt, decrypt } = require("eccrypto");
 const { publicKeyConvert} = require("secp256k1");
 const ipfsAPI = require('ipfs-http-client');
 const ipfs = ipfsAPI({host: 'ipfs.infura.io', port: '5001', protocol: 'https' })
+
+  // todo get from secret contract
+const publickey = '0x04a8873dd159b2c241dcf56ff4baa59e84cc0124844340d6eec7b7f8fd795a921a7e5fc50298aa728ba9fe4561dd99cb2d52e6267a8e0549ccf34ca767b6593ab8';
+const privateKey = '0x7934533cd797cfe47d7b5c43ddcf80ee1605aa2d209137bbf1c8b5bb4003f194';
 
 const getFromIPFS = async hashToGet => {
   for await (const file of ipfs.get(hashToGet)) {
@@ -27,14 +31,8 @@ const getFromIPFS = async hashToGet => {
 }
 
 const addToIPFS = async fileToUpload => {
-  // todo get from secret contract
-  const publickey = '0x04a8873dd159b2c241dcf56ff4baa59e84cc0124844340d6eec7b7f8fd795a921a7e5fc50298aa728ba9fe4561dd99cb2d52e6267a8e0549ccf34ca767b6593ab8';
-  const privateKey = '0x7934533cd797cfe47d7b5c43ddcf80ee1605aa2d209137bbf1c8b5bb4003f194';
 
   const data = await encryptWithPublicKey(publickey, fileToUpload);
-
-  // test decrypt
-  const decrypted = await decryptWithPrivateKey(privateKey, data);
   
   for await (const result of ipfs.add(data)) {
     return result
@@ -116,13 +114,20 @@ function App() {
   const myAttestation = useContractReader(readContracts,"Attestor","attestations",[address],1777);
 
   const [ data, setData ] = useState()
+  const [ desc, setDesc ] = useState()
   const [ sending, setSending ] = useState()
   const [ ipfsHash, setIpfsHash ] = useState()
   const [ ipfsContents, setIpfsContents ] = useState()
+  const [ decryptedIpfsContents, setDecryptedIpfsContents ] = useState()
   const [ attestationContents, setAttestationContents ] = useState()
 
   const asyncGetFile = async ()=>{
     let result = await getFromIPFS(ipfsHash)
+
+
+   // test decrypt
+    const decrypted = await decryptWithPrivateKey(privateKey, result.toString());
+    setDecryptedIpfsContents(decrypted)
     setIpfsContents(result.toString())
   }
 
@@ -138,9 +143,16 @@ function App() {
       )
     }else{
       ipfsDisplay = (
-        <pre style={{margin:8,padding:8,border:"1px solid #dddddd",backgroundColor:"#ededed"}}>
-          {ipfsContents}
-        </pre>
+        <div>
+          <Typography>Encrypted data from IPFS:</Typography>
+          <pre style={{margin:8,padding:8,border:"1px solid #dddddd",backgroundColor:"#ededed"}}>
+            {ipfsContents}
+          </pre>
+          <Typography>Decrypted:</Typography>
+          <pre style={{margin:8,padding:8,border:"1px solid #dddddd",backgroundColor:"#ededed"}}>
+            {decryptedIpfsContents}
+          </pre>
+        </div>
       )
     }
   }
@@ -194,7 +206,7 @@ function App() {
         <TextArea rows={10} value={data} onChange={(e)=>{
           setData(e.target.value)
         }} />
-        <Button style={{margin:8}} loading={sending} size="large" shape="round" type="primary" onClick={async()=>{
+        <Button disabled={!data} style={{margin:8}} loading={sending} size="large" shape="round" type="primary" onClick={async()=>{
           console.log("UPLOADING...")
           setSending(true)
           setIpfsHash()
@@ -214,36 +226,21 @@ function App() {
         }} />
         {ipfsDisplay}
 
-        <Button disabled={!ipfsHash} style={{margin:8}} size="large" shape="round" type="primary" onClick={async()=>{
-          tx( writeContracts["Attestor"].attest(ipfsHash) )
-        }}>Attest to this hash on Ethereum</Button>
+        Description: <Input value={desc} onChange={(e)=>{
+          setDesc(e.target.value)
+        }} />
+
+        <Button disabled={!ipfsHash || !desc} style={{margin:8}} size="large" shape="round" type="primary" onClick={async()=>{
+          const itemPrice = ethers.utils.parseEther("1.0").toString();
+          debugger
+          tx( writeContracts["Padlock"].create(ipfsHash, desc, itemPrice))
+        }}>Create item for sale</Button>
       </div>
 
       <div style={{padding:32,textAlign: "left"}}>
         {attestationDisplay}
       </div>
 
-      {/*<div style={{padding:64,textAlign: "left"}}>
-        <Contract
-          name={"Attestor"}
-          provider={injectedProvider}
-          address={address}
-        />
-      </div>*/}
-
-      <div style={{position:'fixed',textAlign:'right',right:0,bottom:20,padding:10}}>
-        <Row align="middle" gutter={4}>
-          <Col span={10}>
-            <Provider name={"mainnet"} provider={mainnetProvider} />
-          </Col>
-          <Col span={6}>
-            <Provider name={"local"} provider={localProvider} />
-          </Col>
-          <Col span={8}>
-            <Provider name={"injected"} provider={injectedProvider} />
-          </Col>
-        </Row>
-      </div>
       <div style={{position:'fixed',textAlign:'left',left:0,bottom:20,padding:10}}>
         <Row align="middle" gutter={4}>
           <Col span={9}>
