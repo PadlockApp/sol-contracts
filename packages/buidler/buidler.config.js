@@ -105,7 +105,7 @@ module.exports = {
     url: "https://api-ropsten.etherscan.io/api",
     // Your API key for Etherscan
     // Obtain one at https://etherscan.io/
-    apiKey: "FW9DUVC14V1WUDZNSWD7BZ4GUCMAZIN416"
+    apiKey: "3ENH5UUTUYS7SQ271C8VY5J462XPGCD6B4"
   },
   defaultNetwork: 'localhost',
   networks: {
