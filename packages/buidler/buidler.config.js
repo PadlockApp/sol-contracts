@@ -1,5 +1,6 @@
 const { usePlugin } = require('@nomiclabs/buidler/config')
 usePlugin("@nomiclabs/buidler-truffle5");
+usePlugin("@nomiclabs/buidler-etherscan");
 const fs = require("fs")
 
 const DEBUG = true
@@ -98,6 +99,14 @@ try{
 }catch(e){ /* ignore for now because it might now have a mnemonic.txt file */ }
 
 module.exports = {
+  etherscan: {
+    // The url for the Etherscan API you want to use.
+    // For example, here we're using the one for the Ropsten test network
+    url: "https://api-ropsten.etherscan.io/api",
+    // Your API key for Etherscan
+    // Obtain one at https://etherscan.io/
+    apiKey: "3ENH5UUTUYS7SQ271C8VY5J462XPGCD6B4"
+  },
   defaultNetwork: 'localhost',
   networks: {
     localhost: {

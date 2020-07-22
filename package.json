@@ -23,6 +23,7 @@
     "compile": "cd packages/buidler && npx buidler compile",
     "deploy": "cd packages/buidler && npx buidler run scripts/deploy.js && npx buidler run scripts/publish.js",
     "deploy:ropsten": "cd packages/buidler && npx buidler run scripts/deploy.js --network ropsten && npx buidler run scripts/publish.js",
+    "verify:ropsten": "cd packages/buidler && npx buidler verify-contract --contract-name Padlock --address 0x61EE6FEFE8C6B859c139A4b87F2AB3084e7B4dE3 \"0x7dF7CC03D06D5f4808Af22ae419F9A2733483E59\"",
     "watch": "cd packages/buidler && node scripts/watch.js",
     "accounts": "cd packages/buidler && npx buidler accounts",
     "balance": "cd packages/buidler && npx buidler balance",
@@ -32,7 +33,8 @@
     "s3": "cd packages/react-app && node s3"
   },
   "devDependencies": {
-    "@nomiclabs/buidler": "1.3.3-rc.0",
+    "@nomiclabs/buidler": "^1.3.3",
+    "@nomiclabs/buidler-etherscan": "^1.3.3",
     "@nomiclabs/buidler-truffle5": "1.3.3-rc.0",
     "@nomiclabs/buidler-web3": "1.3.3-rc.0"
   },
