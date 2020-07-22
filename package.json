@@ -1,5 +1,5 @@
 {
-  "name": "@uniswap-v1-app/monorepo",
+  "name": "@padlock-app/monorepo",
   "version": "1.0.0",
   "keywords": [
     "ethereum",
@@ -10,20 +10,21 @@
   ],
   "private": true,
   "scripts": {
-    "react-app:build": "yarn workspace @uniswap-v1-app/react-app build --max-old-space-size=12288",
-    "react-app:eject": "yarn workspace @uniswap-v1-app/react-app eject",
-    "react-app:start": "yarn workspace @uniswap-v1-app/react-app start",
-    "react-app:test": "yarn workspace @uniswap-v1-app/react-app test",
+    "react-app:build": "yarn workspace @padlock-app/react-app build --max-old-space-size=12288",
+    "react-app:eject": "yarn workspace @padlock-app/react-app eject",
+    "react-app:start": "yarn workspace @padlock-app/react-app start",
+    "react-app:test": "yarn workspace @padlock-app/react-app test",
     "ship": "echo 'Sorry, this does not work yet'",
-    "build": "yarn workspace @uniswap-v1-app/react-app build --max-old-space-size=12288",
+    "build": "yarn workspace @padlock-app/react-app build --max-old-space-size=12288",
     "chain": "cd packages/buidler && npx buidler node",
     "node": "cd packages/buidler && npx buidler node",
     "test": "cd packages/buidler && npx buidler test",
-    "start": "yarn workspace @uniswap-v1-app/react-app start",
+    "start": "yarn workspace @padlock-app/react-app start",
     "compile": "cd packages/buidler && npx buidler compile",
     "deploy": "cd packages/buidler && npx buidler run scripts/deploy.js && npx buidler run scripts/publish.js",
     "deploy:ropsten": "cd packages/buidler && npx buidler run scripts/deploy.js --network ropsten && npx buidler run scripts/publish.js",
-    "verify:ropsten": "cd packages/buidler && npx buidler verify-contract --contract-name Padlock --address 0x61EE6FEFE8C6B859c139A4b87F2AB3084e7B4dE3 \"0x7dF7CC03D06D5f4808Af22ae419F9A2733483E59\"",
+    "verify:ropsten-padlock": "cd packages/buidler && npx buidler verify-contract --contract-name Padlock --address 0x48E687748DC6172E283Ee7467e35d37A6010BbFB \"0x9fd75be6d019A96ff7A70e85e841E45CcB9E8936\"",
+    "verify:ropsten-payment": "cd packages/buidler && npx buidler verify-contract --contract-name PaymentToken --address 0x9fd75be6d019A96ff7A70e85e841E45CcB9E8936 \"PadlockPayment\" \"TEST\"",
     "watch": "cd packages/buidler && node scripts/watch.js",
     "accounts": "cd packages/buidler && npx buidler accounts",
     "balance": "cd packages/buidler && npx buidler balance",
@@ -42,5 +43,8 @@
     "packages": [
       "packages/*"
     ]
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.0"
   }
 }
