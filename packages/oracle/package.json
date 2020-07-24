@@ -1,5 +1,21 @@
 {
+  "author": {
+    "name": "Taariq Levack",
+    "email": "levackt@users.noreply.github.com"
+  },
   "name": "@padlock-app/oracle",
   "version": "1.0.0",
-  "main": "./src/index.js"
+  "main": "./src/index.js",
+  "dependencies": {
+    "console-stamp": "^0.2.9",
+    "convict": "^6.0.0",
+    "cosmos-lib": "^1.1.0",
+    "dotenv": "^8.2.0",
+    "dotenv-defaults": "^2.0.0",
+    "dotenv-expand": "^5.1.0",
+    "secretjs": "^0.9.10",
+    "web3": "^1.2.11",
+    "winston": "^3.3.3",
+    "winston-console-format": "^1.0.5"
+  }
 }

@@ -12,6 +12,7 @@ describe("Padlock dApp", function() {
   let owner;
   const hash = "test";
   const desc = "a thing";
+  const secretRecipient = "secret18acg8ylf9ppgnzqszx0qg5aww53qayrwfh0q0v";
   const id = "1";
   const price = ether("1");
   
@@ -63,13 +64,15 @@ describe("Padlock dApp", function() {
         await paymentContract.approve(padlockContract.address, amount, {from: buyer});
         expect(await paymentContract.allowance(buyer, padlockContract.address)).to.be.bignumber.equal(amount);
 
-        let receipt = await padlockContract.order(id, {from: buyer});
+        let receipt = await padlockContract.order(id, secretRecipient, {from: buyer});
         expectEvent(receipt, 'Order', {
+          creator: creator,
           buyer: buyer,
           hash: hash,
           description: desc,
           price: price,
-          id: id
+          id: id,
+          recipient: secretRecipient
         });
       });
 

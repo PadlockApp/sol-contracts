@@ -1,0 +1,6 @@
+{
+  "networkId": "50",
+  "pollingInterval": 1000,
+  "ethProviderUrl": "http://localhost:8545",
+  "nbConfirmations": "1"
+}

@@ -49,14 +49,15 @@ contract Padlock is Context, AccessControl, Ownable {
     emit Created(msg.sender, hash, description, numCreations, price);
   }
 
-  function order(uint256 id) public {
+  function order(uint256 id, string memory recipient) public {
+    // todo validate receipient]
     require(id <= numCreations, "Item does not exist");
     Creation memory creation = creations[id];
     uint256 price = creation.price;
     require(ERC20(paymentContract).balanceOf(_msgSender()) >= price, "Insufficient balance");
     require(ERC20(paymentContract).allowance(_msgSender(), address(this)) >= price, "Payment not approved");
     require(ERC20(paymentContract).transferFrom(_msgSender(), address(this), price), "Failed to deposit");
-    emit Order(msg.sender, creation.hash, creation.description, id, price);
+    emit Order(msg.sender, creation.creator, creation.hash, creation.description, id, price, recipient);
   }
 
   /// completes the purchase, minting an NFT for the new owner.
@@ -73,14 +74,14 @@ contract Padlock is Context, AccessControl, Ownable {
 
     PadlockNFT(nftContract).mint(buyer, id);
     
-    emit Purchased(creation.creator, creation.hash, creation.description, id, price);
+    emit Purchased(buyer, creation.creator, creation.hash, creation.description, id, price);
     emit Payment(creation.creator, payment);
     emit Payment(owner(), commissionAmount);
   }
 
   event Created(address indexed creator, string hash, string description, uint256 indexed id, uint256 price);
-  event Purchased(address indexed creator, string hash, string description, uint256 indexed id, uint256 price);
-  event Order(address indexed buyer, string hash, string description, uint256 indexed id, uint256 price);
+  event Purchased(address indexed buyer, address indexed creator, string hash, string description, uint256 indexed id, uint256 price);
+  event Order(address indexed buyer, address indexed creator, string hash, string description, uint256 indexed id, uint256 price, string recipient);
   event PaymentContractChanged(address indexed paymentContract);
   event Payment(address indexed payee, uint256 amount);
 }
