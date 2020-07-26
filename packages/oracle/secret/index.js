@@ -1,11 +1,10 @@
 const logger = require('../common/logger');
 const { EnigmaUtils, Secp256k1Pen, SigningCosmWasmClient, pubkeyToAddress, encodeSecp256k1Pubkey } = require("secretjs");
 const { isValidCosmosAddress } = require('../common/utils');
+const config = require('../common/config');
 
-
-// todo env
-const mnemonic = "female chuckle price shock observe grocery black setup tide alien save deer road leisure boost upset inmate bone artist sight champion fan future stem";
-const contractAddress = "secret10pyejy66429refv3g35g2t7am0was7ya6hvrzf";
+const mnemonic = config.secretMnemonic;
+const contractAddress = config.secretContract;
 
 const secretOptions = {
     httpUrl: "http://localhost:1317",
@@ -43,7 +42,7 @@ async function whitelistAddress (address) {
         throw new Error(`address=${address} is invalid`)
     }
 
-    const whitelistMsg = {"address": address}
+    const whitelistMsg = {"WhitelistAddress": {"address": address}}
     const client = await getClient()
     let result = await client.execute(contractAddress, whitelistMsg);
     console.log(`Whitelisted address: ${JSON.stringify(result)}`);

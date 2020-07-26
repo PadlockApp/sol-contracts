@@ -3,11 +3,6 @@ const Web3 = require('web3');
 const Padlock = require('../../buidler/artifacts/Padlock.json');
 const { sleep, isValidCosmosAddress } = require('./utils');
 const logger = require('./logger');
-var fs = require('fs');
-var path = require('path');
-const PadlockAddressPath = '../../buidler/artifacts/Padlock.address';
-const latestAddress = fs.readFileSync(path.resolve(__dirname, PadlockAddressPath));
-const ropstenAddress = "0x3BC0dA3De7a121516B62F4b9349CeFf3103D006a";
 /**
  * @typedef {Object} Order
  * @property {string} buyer - eth address of buyer
@@ -18,18 +13,16 @@ const ropstenAddress = "0x3BC0dA3De7a121516B62F4b9349CeFf3103D006a";
  */
 
 class OrderWatcher {
-    constructor (provider, networkId, nbConfirmations = 0, fromBlock = 0, pollingInterval = 1000) {
+    constructor (provider, networkId, nbConfirmations = 0, fromBlock = 0, pollingInterval = 1000,
+        padlockContract, padlockAddress) {
         this.web3 = new Web3(provider);
-        let padlockAddress = networkId === "3" ? ropstenAddress : latestAddress;
-        logger.info(`padlockAddress=${padlockAddress}`)
         this.fromBlock = fromBlock;
-        this.padlockContract = new this.web3.eth.Contract(
-            Padlock.abi,
-            padlockAddress
-        );
+        logger.info(`Padlock address=${padlockAddress}`)
         this.watching = false;
         this.pollingInterval = pollingInterval;
         this.nbConfirmations = nbConfirmations;
+        this.padlockContract = padlockContract;
+        this.padlockAddress = padlockAddress;
     }
 
     /**
@@ -44,13 +37,10 @@ class OrderWatcher {
             // Delay reading events by N confirmations (block numbers)
             // Using the default 'latest' would emit events that could be reverted in a reorg
             const toBlock = (this.nbConfirmations === 0) ? currentBlock : currentBlock - this.nbConfirmations;
-            const evts = await this.padlockContract.getPastEvents('Order', {
+            const evts = await this.padlockContract.getPastEvents('NewOrder', {
                 fromBlock: this.fromBlock,
                 toBlock
             });
-            if (this.nbConfirmations > 0) {
-                logger.info('Delayed query with confirmations');
-            }
             logger.info(`Got [${evts.length}] events`);
             for (const evt of evts) {
                 const blockPosition = evt.blockNumber;
@@ -63,7 +53,7 @@ class OrderWatcher {
                 const logOrder = {
                     transactionHash: evt.transactionHash,
                     recipient: evt.returnValues.recipient,
-                    id: evt.returnValues.id,
+                    orderId: evt.returnValues.orderId,
                     description: evt.returnValues.description,
                     buyer: Web3.utils.toChecksumAddress(evt.returnValues.buyer),
                     creator: evt.returnValues.creator,

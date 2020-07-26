@@ -13,6 +13,8 @@
     "dotenv": "^8.2.0",
     "dotenv-defaults": "^2.0.0",
     "dotenv-expand": "^5.1.0",
+    "ethereumjs-tx": "^2.1.2",
+    "ethers": "^4.0.43",
     "secretjs": "^0.9.10",
     "web3": "^1.2.11",
     "winston": "^3.3.3",

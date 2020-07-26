@@ -14,6 +14,7 @@ describe("Padlock dApp", function() {
   const desc = "a thing";
   const secretRecipient = "secret18acg8ylf9ppgnzqszx0qg5aww53qayrwfh0q0v";
   const id = "1";
+  const orderId = "1";
   const price = ether("1");
   
   before(async function() {
@@ -65,27 +66,26 @@ describe("Padlock dApp", function() {
         expect(await paymentContract.allowance(buyer, padlockContract.address)).to.be.bignumber.equal(amount);
 
         let receipt = await padlockContract.order(id, secretRecipient, {from: buyer});
-        expectEvent(receipt, 'Order', {
+        expectEvent(receipt, 'NewOrder', {
           creator: creator,
           buyer: buyer,
           hash: hash,
           description: desc,
           price: price,
           id: id,
-          recipient: secretRecipient
+          recipient: secretRecipient,
+          orderId: orderId
         });
       });
 
       it("should mint token", async function() {
         const key = "secret sauce";
         receipt = await padlockContract.completePurchase(
-          id, buyer, key, {from: owner});
-        expectEvent(receipt, 'Purchased', {
-          creator: creator
-        });
+          orderId, {from: owner});
         expectEvent(receipt, 'Payment', {
           payee: creator, 
-          amount: ether("0.99")
+          amount: ether("0.99"),
+          orderId
         });
       });
     });

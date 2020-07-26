@@ -39,6 +39,30 @@ const config = convict({
         arg: 'nbConfirmations',
         env: 'NB_CONFIRMATIONS'
     },
+    oracleEthKey: {
+        format: String,
+        default: '',
+        arg: 'oracleEthKey',
+        env: 'ORACLE_ETH_KEY'
+    },
+    oracleEthAddress: {
+        format: String,
+        default: '',
+        arg: 'oracleEthAddress',
+        env: 'ORACLE_ETH_ADDRESS'
+    },
+    secretContract: {
+        format: String,
+        default: '',
+        arg: 'secretContract',
+        env: 'SECRET_CONTRACT'
+    },
+    secretMnemonic: {
+        format: String,
+        default: '',
+        arg: 'secretMnemonic',
+        env: 'SECRET_MNEMONIC'
+    }
 });
 
 const env = config.get('env');
