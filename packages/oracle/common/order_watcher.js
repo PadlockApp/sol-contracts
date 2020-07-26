@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle,no-await-in-loop */
 const Web3 = require('web3');
 const Padlock = require('../../buidler/artifacts/Padlock.json');
+const PadlockNFT = require('../../buidler/artifacts/PadlockNFT.json');
 const { sleep, isValidCosmosAddress } = require('./utils');
 const logger = require('./logger');
 /**

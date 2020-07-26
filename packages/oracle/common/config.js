@@ -42,6 +42,7 @@ const config = convict({
     oracleEthKey: {
         format: String,
         default: '',
+        sensitive: true,
         arg: 'oracleEthKey',
         env: 'ORACLE_ETH_KEY'
     },
@@ -60,6 +61,7 @@ const config = convict({
     secretMnemonic: {
         format: String,
         default: '',
+        sensitive: true,
         arg: 'secretMnemonic',
         env: 'SECRET_MNEMONIC'
     }

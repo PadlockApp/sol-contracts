@@ -17,7 +17,7 @@ class PadlockAccess {
      * @param pollingInterval
      */
     constructor (provider, networkId, padlockContract, padlockAddress, nbConfirmation = 1, 
-        fromBlock = 0, pollingInterval = 3000, oracleEthAddress, oracleEthKey) {
+        fromBlock = 0, pollingInterval = 3000, oracleEthAddress, oracleEthKey, padlockNftContract) {
         this.pollingInterval = pollingInterval;
         this.padlockContract = padlockContract;
         this.padlockAddress = padlockAddress;
@@ -27,6 +27,7 @@ class PadlockAccess {
         this.oracleEthAddress = oracleEthAddress;
         this.oracleEthKey = oracleEthKey;
         this.web3 = new Web3(provider);
+        this.padlockNftContract = padlockNftContract;
     }
 
     stop () {
@@ -49,6 +50,19 @@ class PadlockAccess {
             logger.info(`PadlockAccess found Order event: ${JSON.stringify(logOrder)}`);
             const { transactionHash, recipient, orderId } = logOrder;
             try {
+                let totalSupply;
+                logger.info(`transactionHash=${transactionHash}, transactionHash=${recipient}, ${orderId}`);
+                await this.padlockNftContract.methods.totalSupply().call(function(err, res){
+                    totalSupply = parseInt(res);
+                });
+
+                if (totalSupply >= orderId) {
+                    logger.info(`${orderId} already hasAccess`);
+                    continue;
+                } else {
+                    logger.info(`Unlocking access =${orderId}`);
+                }
+                
                 whitelistAddress(recipient)
                 logger.info(`Sending from=${this.oracleEthAddress}, to=${this.padlockAddress}`)
 
