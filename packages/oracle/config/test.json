@@ -1,0 +1,5 @@
+{
+  "networkId": "3",
+  "ethProviderUrl": "https://ropsten.infura.io/v3/f2115ad142704fbca5eeeeb9623ada12",
+  "nbConfirmations": "1"
+}

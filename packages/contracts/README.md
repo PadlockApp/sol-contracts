@@ -1,4 +1,4 @@
-## @uniswap-v1-app/contracts
+## @padlock-app/contracts
 
 A minimalist, opinionated structure for managing smart contract ABIs and addresses.<br/>
 
