@@ -18,10 +18,9 @@ var fs = require('fs');
 var path = require('path');
 const PadlockAddressPath = '../buidler/artifacts/Padlock.address';
 const latestAddress = fs.readFileSync(path.resolve(__dirname, PadlockAddressPath));
-const ropstenAddress = "0x1112917ea50cf050503c9e0564efe9f26b8499a4";
 
-const padlockAddress = config.networkId === "3" ? ropstenAddress : latestAddress;
-        logger.info(`padlockAddress=${padlockAddress}`)
+const padlockAddress = config.networkId === "3" ? config.ethContractAddress : latestAddress;
+logger.info(`padlockAddress=${padlockAddress}`)
 const provider = new Web3.providers.HttpProvider(config.ethProviderUrl);
 const Padlock = require('../buidler/artifacts/Padlock.json');
 const PadlockNFT = require('../buidler/artifacts/PadlockNFT.json');

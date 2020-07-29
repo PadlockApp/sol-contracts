@@ -64,6 +64,12 @@ const config = convict({
         sensitive: true,
         arg: 'secretMnemonic',
         env: 'SECRET_MNEMONIC'
+    },
+    ethContractAddress: {
+        format: String,
+        default: '',
+        arg: 'ethContractAddress',
+        env: 'ETH_CONTRACT_ADDRESS'
     }
 });
 
