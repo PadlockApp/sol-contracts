@@ -114,7 +114,7 @@ function App() {
   const myAttestation = useContractReader(readContracts,"Attestor","attestations",[address],1777);
 
   const [ data, setData ] = useState()
-  const [ desc, setDesc ] = useState()
+  const [ metadataHash, setMetadataHash ] = useState()
   const [ sending, setSending ] = useState()
   const [ ipfsHash, setIpfsHash ] = useState()
   const [ ipfsContents, setIpfsContents ] = useState()
@@ -226,14 +226,14 @@ function App() {
         }} />
         {ipfsDisplay}
 
-        Description: <Input value={desc} onChange={(e)=>{
-          setDesc(e.target.value)
+        Metadata Hash: <Input value={metadataHash} onChange={(e)=>{
+          setMetadataHash(e.target.value)
         }} />
 
-        <Button disabled={!ipfsHash || !desc} style={{margin:8}} size="large" shape="round" type="primary" onClick={async()=>{
+        <Button disabled={!ipfsHash || !metadataHash} style={{margin:8}} size="large" shape="round" type="primary" onClick={async()=>{
           const itemPrice = ethers.utils.parseEther("1.0").toString();
           debugger
-          tx( writeContracts["Padlock"].create(ipfsHash, desc, itemPrice))
+          tx( writeContracts["Padlock"].create(ipfsHash, metadataHash, itemPrice))
         }}>Create item for sale</Button>
       </div>
 

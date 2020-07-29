@@ -8,7 +8,7 @@ function getCreations(lastId, creator) {
         id
         creator
         hash
-        description
+        metadataHash
     }
     }`;
 

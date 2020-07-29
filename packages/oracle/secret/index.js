@@ -5,9 +5,10 @@ const config = require('../common/config');
 
 const mnemonic = config.secretMnemonic;
 const contractAddress = config.secretContract;
+const secretApiHost = config.secretApiHost || "http://localhost:1317";
 
 const secretOptions = {
-    httpUrl: "http://localhost:1317",
+    httpUrl: secretApiHost,
     networkId: "enigma-testnet",
     feeToken: "uscrt",
     gasPrice: 0.025,

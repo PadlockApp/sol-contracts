@@ -8,7 +8,7 @@ const logger = require('./logger');
  * @typedef {Object} Order
  * @property {string} buyer - eth address of buyer
  * @property {string} hash - content hash
- * @property {string} description - description of the content
+ * @property {string} metadataHash - metadataHash of the content
  * @property {string} id - The item ordered
  * @property {string} transactionHash - The transaction hash associated with the receipt
  */
@@ -55,7 +55,7 @@ class OrderWatcher {
                     transactionHash: evt.transactionHash,
                     recipient: evt.returnValues.recipient,
                     orderId: evt.returnValues.orderId,
-                    description: evt.returnValues.description,
+                    metadataHash: evt.returnValues.metadataHash,
                     buyer: Web3.utils.toChecksumAddress(evt.returnValues.buyer),
                     creator: evt.returnValues.creator,
                     hash: evt.returnValues.hash

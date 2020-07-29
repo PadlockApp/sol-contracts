@@ -8,7 +8,7 @@ async function main() {
   // await autoDeploy();
   // OR
   // custom deploy (to use deployed addresses dynamically for example:)
-  // await deploy("Attestor");
+  await deploy("Attestor");
   
   const paymentToken = await deploy("PaymentToken", ['PadlockPayment', 'TEST']);
   const amount = ether("10000000000000");

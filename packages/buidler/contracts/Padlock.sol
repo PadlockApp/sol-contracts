@@ -26,7 +26,7 @@ contract Padlock is Context, AccessControl, Ownable {
     uint256 creationId;
     address creator;
     string hash;
-    string description;
+    string metadataHash;
     uint256 price;
   }
 
@@ -53,12 +53,12 @@ contract Padlock is Context, AccessControl, Ownable {
     nftContract = initNftContract;
   }
 
-  function create(string memory hash, string memory description, uint256 price) public {
+  function create(string memory hash, string memory metadataHash, uint256 price) public {
     require(price >= minPrice, "Price too low");
-    console.log(msg.sender, hash, description, price);
+    console.log(msg.sender, hash, metadataHash, price);
     uint256 creationId = ++numCreations;
-    creations[creationId] = Creation(creationId, msg.sender, hash, description, price);
-    emit Created(msg.sender, hash, description, numCreations, price);
+    creations[creationId] = Creation(creationId, msg.sender, hash, metadataHash, price);
+    emit Created(msg.sender, hash, metadataHash, numCreations, price);
   }
 
   function order(uint256 id, string memory recipient) public {
@@ -72,7 +72,7 @@ contract Padlock is Context, AccessControl, Ownable {
     require(ERC20(paymentContract).balanceOf(_msgSender()) >= price, "Insufficient balance");
     require(ERC20(paymentContract).allowance(_msgSender(), address(this)) >= price, "Payment not approved");
     require(ERC20(paymentContract).transferFrom(_msgSender(), address(this), price), "Failed to deposit");
-    emit NewOrder(msg.sender, creation.creator, creation.hash, creation.description, id, price, recipient, orderId);
+    emit NewOrder(msg.sender, creation.creator, creation.hash, creation.metadataHash, id, price, recipient, orderId);
   }
  
   /// completes the purchase, minting an NFT for the new owner.
@@ -93,16 +93,16 @@ contract Padlock is Context, AccessControl, Ownable {
     require(ERC20(paymentContract).transfer(creation.creator, payment), "Failed to transfer payment");
 
     PadlockNFT(nftContract).mint(order.buyer, orderId);
-    emit Purchased(order.buyer, creation.creator, creation.hash, creation.description, creation.creationId,
+    emit Purchased(order.buyer, creation.creator, creation.hash, creation.metadataHash, creation.creationId,
       orderId, price);
     emit Payment(creation.creator, payment, orderId);
     emit Payment(owner(), commissionAmount, orderId);
   }
 
-  event Created(address indexed creator, string hash, string description, uint256 indexed id, uint256 price);
-  event Purchased(address indexed buyer, address indexed creator, string hash, string description,
+  event Created(address indexed creator, string hash, string metadataHash, uint256 indexed id, uint256 price);
+  event Purchased(address indexed buyer, address indexed creator, string hash, string metadataHash,
     uint256 indexed creationId, uint256 orderId, uint256 price);
-  event NewOrder(address indexed buyer, address indexed creator, string hash, string description,
+  event NewOrder(address indexed buyer, address indexed creator, string hash, string metadataHash,
     uint256 indexed id, uint256 price, string recipient, uint256 orderId);
   event PaymentContractChanged(address indexed paymentContract);
   event Payment(address indexed payee, uint256 amount, uint256 orderId);

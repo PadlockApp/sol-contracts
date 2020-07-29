@@ -11,7 +11,7 @@ describe("Padlock dApp", function() {
   let buyer;
   let owner;
   const hash = "test";
-  const desc = "a thing";
+  const metadataHash = "a thing";
   const secretRecipient = "secret18acg8ylf9ppgnzqszx0qg5aww53qayrwfh0q0v";
   const id = "1";
   const orderId = "1";
@@ -46,15 +46,15 @@ describe("Padlock dApp", function() {
     });
     describe("create()", function() {
       it("Price too low", async function() {
-        expectRevert(padlockContract.create(hash, desc, ether("0.99")), "Price too low");
+        expectRevert(padlockContract.create(hash, metadataHash, ether("0.99")), "Price too low");
       });
 
       it("Should create item", async function() {
-        const receipt = await padlockContract.create(hash, desc, price, {from: creator});
+        const receipt = await padlockContract.create(hash, metadataHash, price, {from: creator});
         expectEvent(receipt, 'Created', {
           creator: creator,
           hash: hash,
-          description: desc,
+          metadataHash: metadataHash,
           price: price,
           id: id
         });
@@ -70,7 +70,7 @@ describe("Padlock dApp", function() {
           creator: creator,
           buyer: buyer,
           hash: hash,
-          description: desc,
+          metadataHash: metadataHash,
           price: price,
           id: id,
           recipient: secretRecipient,

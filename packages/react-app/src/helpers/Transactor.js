@@ -57,7 +57,7 @@ export default function Transactor(provider,gasPrice,etherscan) {
         }else{
           notification['info']({
             message: 'Local Transaction Sent',
-            description: result.hash,
+            metadataHash: result.hash,
             placement:"bottomRight"
           });
         }
@@ -69,7 +69,7 @@ export default function Transactor(provider,gasPrice,etherscan) {
         console.log("Transaction Error:",e.message)
         notification['error']({
           message: 'Transaction Error',
-          description: e.message
+          metadataHash: e.message
         });
       }
     }
