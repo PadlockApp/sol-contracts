@@ -1,14 +1,18 @@
 const fetch = require('node-fetch');
 
-function getCreations(lastId, creator) {
+function getBuyerOrders(lastId, buyer) {
     batchSize = 1
     const query = `
     {
-        creations(first: ${batchSize}, where: {id_gt: ${lastId}, creator: \"${creator}\"}) {
+        creations(first: ${batchSize}) {
             id
             creator
             hash
             metadataHash
+        }
+        orders(first: 5, where: {id_gt: ${lastId}, buyer: \"${buyer}\"}) {
+            id
+            recipient
         }
     }`;
 
@@ -31,14 +35,14 @@ function getCreations(lastId, creator) {
 
 async function main() {
     let lastId = 0;
-    const creator = "0x05b993fc742fdb87d179835e59d2272a3bc83cd1";
-    let creations = await getCreations(lastId, creator);
+    const buyer = "0xc783df8a850f42e7f7e57013759c285caa701eb6";
+    let creations = await getBuyerOrders(lastId, buyer);
     do {
         for (i = 0; i < creations.length; i++) {
             console.log(JSON.stringify(i));
             lastId = parseInt(i.id, 'hex')
         }
-        creations = await getCreations(lastId, creator);
+        creations = await getBuyerOrders(lastId, buyer);
     } while (creations.length > 0);
 }
 
